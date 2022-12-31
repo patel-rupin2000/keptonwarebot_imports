@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% include 'head.html' %}
+</head>
+<header style="width: 100%;margin: 0px;padding: 0px;overflow-x: hidden">
+    {% include 'navbar.html' %}
+
+</header>
+
+
+<body>
+<br>
+<style>
+.filterDiv {
+
+    display: none;
+    width: max-content;
+}
+
+.show {
+    display: block;
+    width: max-content;
+}
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+
+.btn.active {
+  background-color: #666;
+  color: white;
+}
+
+</style>
+
+<div id="myBtnContainer">
+<input type="radio" class="btn-check btn active" name="options" style="visibility: hidden" onclick="filterSelection('All Products')" id="option0" autocomplete="off" checked>
+<label class="btn btn-outline" style="background-color: #473829;color: #fae4b9" for="option0">Show All</label>
+{% for i in range(1,product_types_length) %}
+<input type="radio" class="btn-check btn" name="options" style="visibility: hidden" onclick="filterSelection('{{ product_types[i] }}')" id="option{{ i }}" autocomplete="off" >
+<label class="btn btn-outline" style="background-color: #473829;color: #fae4b9" for="option{{ i }}">{{ product_types[i] }}</label>
+{% endfor %}
+    <h1 id="output"></h1>
+</div>
+<div class="container" style="flex: content-box; padding-top: 5%;margin: auto;width: 60%;padding: 10px;">
+
+    {% for i in all_products_dict %}
+
+
+
+
+    <div class="row row-cols-3 g-3">
+
+      {% for j in all_products_dict[i] %}
+
+          <div class="filterDiv {{ i }}">
+
+          <div class="col-lg-8 d-flex align-items-stretch">
+                <div class="card-deck" style="width: 18rem;background-color: transparent;">
+                  <img class="card-img-top img-fluid" src="{{ all_products_dict[i][j][0] }}" height="200" style="filter: drop-shadow(5px 5px 5px #222)" alt="Card image cap">
+                  <div class="card-body">
+                      <h5 class="card-title">{{ all_products_dict[i][j][1] }}</h5>
+                        <p class="card-text">{{ all_products_dict[i][j][2] }}</p>
+                  </div>
+                </div>
+
+
+          </div>
+          </div>
+      {% endfor %}
+
+</div>
+    {% endfor %}
+
+</div>
+<script>
+filterSelection("All Products")
+function filterSelection(c) {
+
+
+
+
+    document.getElementById('output').innerHTML = c;
+
+  var x, i;
+  x = document.getElementsByClassName("filterDiv");
+  if (c == "All Products") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
+</script>
+</body>
+<footer style="background-color: #473829;position: relative;bottom: 0;width: 100%;margin: 0px;padding: 0px;overflow-x: hidden">
+    {% include 'bottom_details.html' %}
+</footer>
+</html>
